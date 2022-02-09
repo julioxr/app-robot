@@ -132,7 +132,7 @@ crearPerfil = (indiceRobot) => {
 // complexity = robots[indiceRobot][0].statistics[0].complexity[0].value,
 // security = robots[indiceRobot][0].statistics[0].security[0].value
 
-// ESTA FUNCION ES PARA EL CARRUSEL DEL HOME PUEDA ROTAR
+ESTA FUNCION ES PARA EL CARRUSEL DEL HOME PUEDA ROTAR
 // const capturarEventoArrow = (robots, indice) => {
 
 // }
