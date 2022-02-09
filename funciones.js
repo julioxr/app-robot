@@ -6,11 +6,6 @@ const cargarPagina = async (pagina) => {
     .then((data) => data);
 };
 
-// if (location.pathname == "/perfil-robot") {
-//   let avatarRobot = document.getElementById("avatarRobot");
-//   console.log(avatarRobot);
-// }
-
 /**
  * Para cargar la pagina ejecutar cargarPagina y guardar el resultado en una variabvle y luego hacer el innerHTMl de esa web
  * deberia andar
@@ -73,23 +68,22 @@ const crearSliderRobot = async (indiceRobot) => {
       let avatarType = document.getElementById("avatarType");
       let avatarDescription = document.getElementById("avatarDescription");
 
-      // console.log(avatarType);
-      // console.log(avatarDescription);
       avatarRobot.src = robots[indiceRobot][0].perfilImg;
       avatarName.textContent = robots[indiceRobot][0].name;
       avatarType.textContent = robots[indiceRobot][0].type;
       avatarDescription.innerText = robots[indiceRobot][0].description;
 
-      // console.log(avatarRobot);
       header.classList.add("display__none");
-      // cargarPagina("perfil-robot");
+
+      //LLAMA A la pagina de crear ficha
+      crearFichaCompleta(robots, indiceRobot);
     }
     if (e.target.id === "backBtn") {
-      history.pushState(null, "", "home");
+      // history.pushState(null, "", "home");
       header.classList.remove("display__none");
       let paginaInicial = await cargarPagina("home");
+      crearSliderRobot(robots);
       main.innerHTML = paginaInicial;
-      crearSliderRobot(indiceRobot);
     }
   });
 };
@@ -101,6 +95,31 @@ const insertarRobot = (robots, indiceRobot) => {
   typeRobot.textContent = robots[indiceRobot][0].type;
   descriptionRobot.textContent = robots[indiceRobot][0].description;
 };
+//////////////////////////
+const crearFichaCompleta = async (robots, indiceRobot) => {
+  let avatarCarga = document.getElementById("avatarCarga");
+  let barBlue = document.getElementById("barBlue");
+  avatarCarga.innerHTML =
+    robots[indiceRobot][0].statistics[0].other[0].batteryLife[0].value;
+  energy = robots[indiceRobot][0].statistics[0].energy[0].value;
+  maintenance = robots[indiceRobot][0].statistics[0].maintenance[0].value;
+  complexity = robots[indiceRobot][0].statistics[0].complexity[0].value;
+  security = robots[indiceRobot][0].statistics[0].security[0].value;
+  // para darle elcolor y % a cada barra
+  barBlue.style.width = `${energy}%`;
+  barBlue.style.background = "var(--blueGradient)";
+  barPink.style.width = `${maintenance}%`;
+  barPink.style.background = "var(--pinkGradient)";
+  barOrange.style.width = `${complexity}%`;
+  barOrange.style.background = "var(--orangeGradient)";
+  barGreen.style.width = `${security}%`;
+  barGreen.style.background = "var(--greenGradient)";
+
+  // circleBarBlue.style.strokeDasharray = 200;
+  // circleBarPink.style.strokeDasharray = 170;
+};
+
+////////////////////////////////
 
 crearPerfil = (indiceRobot) => {
   //ESTO YA NO ES UN TEMPLATE AHORA ESTA DENTRO DEL CODIGO
@@ -127,12 +146,7 @@ crearPerfil = (indiceRobot) => {
 
 // })
 
-// energy = robots[indiceRobot][0].statistics[0].energy[0].value,
-// maintenance = robots[indiceRobot][0].statistics[0].maintenance[0].value,
-// complexity = robots[indiceRobot][0].statistics[0].complexity[0].value,
-// security = robots[indiceRobot][0].statistics[0].security[0].value
-
-ESTA FUNCION ES PARA EL CARRUSEL DEL HOME PUEDA ROTAR
+// ESTA FUNCION ES PARA EL CARRUSEL DEL HOME PUEDA ROTAR
 // const capturarEventoArrow = (robots, indice) => {
 
 // }
