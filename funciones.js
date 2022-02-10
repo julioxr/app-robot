@@ -1,5 +1,5 @@
 // ESTA FUNCION FETCH LLAMA AL ARCHIVO QUE SE NECESITE REEMPLAZAR EN EL HTML MAIN
-const cargarPagina = async (pagina) => {
+const cargarPagina = (pagina) => {
   let archivoHtml = `${pagina}.html`;
   return fetch(archivoHtml)
     .then((res) => res.text())
@@ -20,6 +20,9 @@ const getRobot = () => {
     .then((data) => data);
 };
 
+/* INICIO FUNCIONES DEL HOME */
+
+// ESTA FUNCION CREA EL SLIDER
 const crearSliderRobot = () => {
   // CREO VARIABLES
   let imagenRobot = document.getElementById("imagenRobot");
@@ -30,6 +33,7 @@ const crearSliderRobot = () => {
   insertarRobot();
 };
 
+// ESTA FUNCION CARGA EL PRIMER ROBOT Y ES EJECUTADA POR PRIMERA VEZ POR CREARSLIDERROBOT
 const insertarRobot = async () => {
   // console.log(indiceRobot);
   let robots = await getRobot();
@@ -38,6 +42,60 @@ const insertarRobot = async () => {
   typeRobot.textContent = robots[indiceRobot][0].type;
   descriptionRobot.textContent = robots[indiceRobot][0].description;
 };
+
+// ESTA FUNCION CARGA LA TABLA DE PRECIOS
+const crearTablaDePrecios = () => {
+  let lista = document.getElementById("lista");
+  let planTitulo = document.getElementById("planTitulo");
+  let anualPrice = document.getElementById("anualPrice");
+  let mensualPrice = document.getElementById("mensualPrice");
+
+  planTitulo.textContent = planes.title;
+  anualPrice.textContent = "$" + planes.anualPrice + " ";
+  mensualPrice.textContent = planes.mensualPrice + " x mes";
+
+  let itemsLista = planes.items;
+  itemsLista.forEach((item) => {
+    lista.innerHTML += `<li>${item}</li>`;
+  });
+
+  // let datosPlanes = Object.entries(planes);
+  // console.log(datosPlanes);
+  // return datosPlanes
+  //   .map(([key, value]) => {
+  //     if (key == "item") {
+  //       return itemsArray.map((x) => `<li>${x}</li>`).join("");
+  //     }
+  //   })
+  //   .join("");
+};
+
+// ESCUCHA LA FLECHA DERECHA DEL SLIDER
+const navegarDerecha = async () => {
+  let robots = await getRobot();
+  indiceRobot++;
+  if (indiceRobot == robots.length) {
+    indiceRobot = 0;
+    insertarRobot();
+  } else {
+    insertarRobot();
+  }
+};
+// ESCUCHA LA FLECHA IZQUIERDA DEL SLIDER
+const navegarIzquierda = async () => {
+  let robots = await getRobot();
+  indiceRobot--; //resto el indice
+  if (indiceRobot < 0) {
+    indiceRobot = robots.length - 1;
+    insertarRobot();
+  } else {
+    insertarRobot();
+  }
+};
+
+/* FIN FUNCIONES DEL HOME */
+
+/* INICIO FUNCIONES DE PERFIL ROBOT */
 
 //ESCUCHO EL BOTON DE VER FICHA FICHA COMPLETA
 const accederPerfilRobot = async () => {
@@ -75,9 +133,14 @@ const accederPerfilRobot = async () => {
 //////////////////////////
 const crearFichaEstadisticas = (robots) => {
   let avatarCarga = document.getElementById("avatarCarga");
+  let chargeTimeNumb = document.getElementById("chargeTimeNumb");
   let barBlue = document.getElementById("barBlue");
+
   avatarCarga.innerHTML =
     robots[indiceRobot][0].statistics[0].other[0].batteryLife[0].value;
+
+  chargeTimeNumb.innerHTML =
+    robots[indiceRobot][0].statistics[0].other[0].chargeTime[0].value;
 
   energy = robots[indiceRobot][0].statistics[0].energy[0].value;
   maintenance = robots[indiceRobot][0].statistics[0].maintenance[0].value;
@@ -96,28 +159,7 @@ const crearFichaEstadisticas = (robots) => {
 
   // circleBarBlue.style.strokeDasharray = 200;
   // circleBarPink.style.strokeDasharray = 170;
+  // obtenerCircunsferencia()
 };
 
-// obtenerCircunsferencia()
-
-//ESCUCHO LAS FLECHAS
-const navegarDerecha = async () => {
-  let robots = await getRobot();
-  indiceRobot++;
-  if (indiceRobot == robots.length) {
-    indiceRobot = 0;
-    insertarRobot();
-  } else {
-    insertarRobot();
-  }
-};
-const navegarIzquierda = async () => {
-  let robots = await getRobot();
-  indiceRobot--; //resto el indice
-  if (indiceRobot < 0) {
-    indiceRobot = robots.length - 1;
-    insertarRobot();
-  } else {
-    insertarRobot();
-  }
-};
+/* FIN FUNCIONES DE PERFIL ROBOT */
