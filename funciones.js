@@ -20,91 +20,70 @@ const getRobot = () => {
     .then((data) => data);
 };
 
-const crearSliderRobot = async (indiceRobot) => {
-  // LLAMO A ROBOT
-  let robots = await getRobot();
+const crearSliderRobot = () => {
   // CREO VARIABLES
   let imagenRobot = document.getElementById("imagenRobot");
   let tituloRobot = document.getElementById("tituloRobot");
   let typeRobot = document.getElementById("typeRobot");
   let descriptionRobot = document.getElementById("descriptionRobot");
   //INSERTO CONTENIDO A VARIABLES
-  insertarRobot(robots, indiceRobot);
-
-  //ESCUCHO LAS FLECHAS
-  window.addEventListener("click", (e) => {
-    if (e.target.id === "arrowRight") {
-      indiceRobot++;
-      if (indiceRobot == robots.length) {
-        indiceRobot = 0;
-        insertarRobot(robots, indiceRobot);
-      } else {
-        insertarRobot(robots, indiceRobot);
-      }
-      // crearPerfil(robots, indice)
-      // crearEstadisticas(robots, indice)
-    } else if (e.target.id === "arrowLeft") {
-      indiceRobot--; //resto el indice
-      if (indiceRobot < 0) {
-        indiceRobot = robots.length - 1;
-        insertarRobot(robots, indiceRobot);
-        // crearPerfil(robots, indiceRobot)
-        // crearEstadisticas(robots, indiceRobot)
-      } else {
-        insertarRobot(robots, indiceRobot);
-      }
-    }
-  });
-
-  //ESCUCHO EL BOTON DE VER FICHA
-  window.addEventListener("click", async (e) => {
-    if (e.target.id == "fileRobotBtn") {
-      history.pushState(null, "", "perfil-robot");
-      let perfilRobot = await cargarPagina("perfil-robot"); // llama a la pagina perfilRobot una vez que cargo puedo crear variables
-      main.innerHTML = perfilRobot; // y puedo insertar contenido
-
-      let avatarRobot = document.getElementById("avatarRobot");
-      let avatarName = document.getElementById("avatarName");
-      let avatarType = document.getElementById("avatarType");
-      let avatarDescription = document.getElementById("avatarDescription");
-
-      avatarRobot.src = robots[indiceRobot][0].perfilImg;
-      avatarName.textContent = robots[indiceRobot][0].name;
-      avatarType.textContent = robots[indiceRobot][0].type;
-      avatarDescription.innerText = robots[indiceRobot][0].description;
-
-      header.classList.add("display__none");
-
-      //LLAMA A la pagina de crear ficha
-      crearFichaCompleta(robots, indiceRobot);
-    }
-    if (e.target.id === "backBtn") {
-      // history.pushState(null, "", "home");
-      header.classList.remove("display__none");
-      let paginaInicial = await cargarPagina("home");
-      crearSliderRobot(robots);
-      main.innerHTML = paginaInicial;
-    }
-  });
+  insertarRobot();
 };
 
-const insertarRobot = (robots, indiceRobot) => {
+const insertarRobot = async () => {
   // console.log(indiceRobot);
+  let robots = await getRobot();
   imagenRobot.src = robots[indiceRobot][0].preview;
   tituloRobot.textContent = robots[indiceRobot][0].name;
   typeRobot.textContent = robots[indiceRobot][0].type;
   descriptionRobot.textContent = robots[indiceRobot][0].description;
 };
+
+//ESCUCHO EL BOTON DE VER FICHA FICHA COMPLETA
+const accederPerfilRobot = async () => {
+  let robots = await getRobot();
+  // history.pushState(null, "", "perfil-robot");
+  let perfilRobot = await cargarPagina("perfil-robot"); // llama a la pagina perfilRobot una vez que cargo puedo crear variables
+  main.innerHTML = perfilRobot; // y puedo insertar contenido
+
+  let avatarRobot = document.getElementById("avatarRobot");
+  let avatarName = document.getElementById("avatarName");
+  let avatarType = document.getElementById("avatarType");
+  let avatarDescription = document.getElementById("avatarDescription");
+  let backBtn = document.getElementById("backBtn");
+
+  avatarRobot.src = robots[indiceRobot][0].perfilImg;
+  avatarName.textContent = robots[indiceRobot][0].name;
+  avatarType.textContent = robots[indiceRobot][0].type;
+  avatarDescription.textContent = robots[indiceRobot][0].description;
+
+  header.classList.add("display__none");
+
+  //LLAMA A la pagina de crear ficha
+  crearFichaEstadisticas(robots);
+
+  backBtn.addEventListener("click", async () => {
+    // history.pushState(null, "", "home");
+    let paginaInicial = await cargarPagina("home");
+    main.innerHTML = paginaInicial;
+    header.classList.remove("display__none");
+
+    insertarRobot(indiceRobot);
+  });
+};
+
 //////////////////////////
-const crearFichaCompleta = async (robots, indiceRobot) => {
+const crearFichaEstadisticas = (robots) => {
   let avatarCarga = document.getElementById("avatarCarga");
   let barBlue = document.getElementById("barBlue");
   avatarCarga.innerHTML =
     robots[indiceRobot][0].statistics[0].other[0].batteryLife[0].value;
+
   energy = robots[indiceRobot][0].statistics[0].energy[0].value;
   maintenance = robots[indiceRobot][0].statistics[0].maintenance[0].value;
   complexity = robots[indiceRobot][0].statistics[0].complexity[0].value;
   security = robots[indiceRobot][0].statistics[0].security[0].value;
+
   // para darle elcolor y % a cada barra
   barBlue.style.width = `${energy}%`;
   barBlue.style.background = "var(--blueGradient)";
@@ -119,34 +98,26 @@ const crearFichaCompleta = async (robots, indiceRobot) => {
   // circleBarPink.style.strokeDasharray = 170;
 };
 
-////////////////////////////////
-
-crearPerfil = (indiceRobot) => {
-  //ESTO YA NO ES UN TEMPLATE AHORA ESTA DENTRO DEL CODIGO
-  // perfilRobot.innerHTML = `
-  //   <div id="sliderElement">
-  //        <img class="image__robot" src="${robots[indiceRobot][0].src}" alt="robot">
-  //               <div class ="text__robot__slider">
-  //                   <h2 class="robot__name title">${robots[indiceRobot][0].name}</h2>
-  //                   <h3 class="s__work">${robots[indiceRobot][0].type}</h3>
-  //                   <p class="description__text">${robots[indiceRobot][0].description}</p>
-  //               </div>
-  //   </div>
-  //   `
-};
-
-// capturarEventoArrow(robots, indiceRobot)
-
 // obtenerCircunsferencia()
 
-// ESTA LLAMADA CARGA EL PERFIL ROBOT, ANTES SE EJECUTABA AUTOMATICAMENTE DENTRO DE OBTENER DATOS BAJO EL NOMBRE capturarEventoBotonVerFicha()
-// window.addEventListener('click', e => {
-// 	e.preventDefault()
-// 	e.stopPropagation() parte a borrar
-
-// })
-
-// ESTA FUNCION ES PARA EL CARRUSEL DEL HOME PUEDA ROTAR
-// const capturarEventoArrow = (robots, indice) => {
-
-// }
+//ESCUCHO LAS FLECHAS
+const navegarDerecha = async () => {
+  let robots = await getRobot();
+  indiceRobot++;
+  if (indiceRobot == robots.length) {
+    indiceRobot = 0;
+    insertarRobot();
+  } else {
+    insertarRobot();
+  }
+};
+const navegarIzquierda = async () => {
+  let robots = await getRobot();
+  indiceRobot--; //resto el indice
+  if (indiceRobot < 0) {
+    indiceRobot = robots.length - 1;
+    insertarRobot();
+  } else {
+    insertarRobot();
+  }
+};

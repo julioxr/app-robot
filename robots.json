@@ -111,28 +111,28 @@
           {
             "energy": [
               {
-                "value": 70,
+                "value": 95,
                 "title": "Gasto Energético",
                 "description": "Winston controla su gasto de energía tomando pequeñas siestas mientras tu descansas. El gasto máximo puede llegar al 80% luego de una tarde jugando en el jardín, reservando el 20% para protegerte por las noches. Tiempo de carga de bateria (100%): 2hs."
               }
             ],
             "maintenance": [
               {
-                "value": 40,
+                "value": 10,
                 "title": "Complejidad",
                 "description": "Mantenimiento moderado. Debes estar alerta de revisar con frecuencia sus ruedas y limpiar su superficie ya que le encanta escabullirse por donde sea."
               }
             ],
             "complexity": [
               {
-                "value": 40,
+                "value": 80,
                 "title": "Complejidad",
                 "description": "es muy fácil de configurar. Sólo asegurate de activar el comando de voz para y él recibirá tus ordenes al instante."
               }
             ],
             "security": [
               {
-                "value": 100,
+                "value": 30,
                 "title": "Seguridad",
                 "description": "es totalmente seguro para los integrantes de tu familia. Está diseñado para ser cariñoso y protector. Sus sensores detectan peligro, lo que lo convierte en una alarma ideal."
               }
